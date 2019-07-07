@@ -1,26 +1,20 @@
 <script>
   import { tick } from "svelte";
   import keycode from "keycode";
-  import store from "./store";
+  import { setTaskStatus, setTaskTitle, removeTask } from "./store/actions";
   export let id;
   export let title;
   export let status;
   let inputEl;
   let editing = false;
   function changeStatus(e) {
-    store.dispatch("setTaskStatus", {
-      id,
-      status: e.target.checked
-    });
+    setTaskStatus(id, e.target.checked);
   }
   function changeTitle(e) {
-    store.dispatch("setTaskTitle", {
-      id,
-      title: e.target.value
-    });
+    setTaskTitle(id, e.target.value);
   }
   function remove() {
-    store.dispatch("removeTask", id);
+    removeTask(id);
   }
   async function edit() {
     editing = true;

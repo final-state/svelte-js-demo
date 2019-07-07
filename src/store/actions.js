@@ -1,29 +1,57 @@
+import { get } from "svelte/store";
 import uuidv1 from "uuid/v1";
+import listStore from ".";
 
-export default {
-  addTask(draftState, title) {
-    draftState.list.push({
+export function addTask(title) {
+  listStore.update(list => {
+    list.push({
       id: uuidv1(),
       title,
       status: false
     });
-  },
-  removeTask(draftState, id) {
-    const index = draftState.list.findIndex(task => task.id === id);
-    if (index >= 0) {
-      draftState.list.splice(index, 1);
-    }
-  },
-  setTaskStatus(draftState, { id, status }) {
-    const task = draftState.list.find(task => task.id === id);
-    if (task !== undefined) {
-      task.status = status;
-    }
-  },
-  setTaskTitle(draftState, { id, title }) {
-    const task = draftState.list.find(task => task.id === id);
-    if (task !== undefined) {
-      task.title = title;
-    }
+    return list;
+  });
+}
+
+export function removeTask(id) {
+  const list = get(listStore);
+  const index = list.findIndex(task => task.id === id);
+  if (index >= 0) {
+    listStore.update(prev => {
+      prev.splice(index, 1);
+      return prev;
+    });
   }
-};
+}
+
+export function setTaskStatus(id, status) {
+  const list = get(listStore);
+  const index = list.findIndex(
+    task => task.id === id && task.status !== status
+  );
+  if (index >= 0) {
+    const task = list[index];
+    listStore.update(prev => {
+      prev.splice(index, 1, {
+        ...task,
+        status
+      });
+      return prev;
+    });
+  }
+}
+
+export function setTaskTitle(id, title) {
+  const list = get(listStore);
+  const index = list.findIndex(task => task.id === id && task.title !== title);
+  if (index >= 0) {
+    const task = list[index];
+    listStore.update(prev => {
+      prev.splice(index, 1, {
+        ...task,
+        title
+      });
+      return prev;
+    });
+  }
+}

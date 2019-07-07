@@ -1,10 +1,9 @@
 <script>
   import TaskList from "./TaskList.svelte";
-  import store from "./store";
-  let list = store.getState().list;
-  store.subscribe(() => (list = store.getState().list));
-  function addTask() {
-    store.dispatch("addTask", "New Task");
+  import list from "./store";
+  import { addTask } from "./store/actions";
+  function add() {
+    addTask("New Task");
   }
 </script>
 
@@ -33,6 +32,6 @@
     State Management:
     <a href="https://github.com/final-state" target="_blank">final-state</a>
   </p>
-  <button on:click={addTask}>Add Task</button>
-  <TaskList {list} />
+  <button on:click={add}>Add Task</button>
+  <TaskList list={$list} />
 </div>
