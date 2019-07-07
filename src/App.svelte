@@ -28,10 +28,7 @@
     Powered by
     <a href="https://svelte.dev" target="_blank">SVELET</a>
   </p>
-  <p>
-    State Management:
-    <a href="https://github.com/final-state" target="_blank">final-state</a>
-  </p>
+  <p>State Management: svelte-store</p>
   <button on:click={add}>Add Task</button>
   <TaskList list={$list} />
 </div>
